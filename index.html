@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Квест знаний</title>
+    <link rel="stylesheet" href="style.css">
+<section class="hero" id="herro">
+<div class="hero__cont">
+<div class="hero_kontent">
+<div class="heto__text">
+<h1 class="hero__title"> Квест на знания <br> для 7-ых классов <br> по физике, информатике и математике </h1>
+<p class="hero__desc"> Здравствуйте дорогие друзья! Мы создали для вас квест для проверки зананий по по трем разным предметам: физика, информатика и математика. <br> Здесь собраны разные задачи с разными сложностями. <br> Самая ваша главная цель - проверить свои знания, что-то вспомнить или узнать с помощью этого теста!<br> За каждый правильный ответ вы постепенно открываете кнопку для перехода к итогам. <br> Желаем вам удачи!</p>
+</div>
+    <style>
+      :root {
+        --primary: #3b82f6;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --text: #1e293b;
+        --accent-success: #10b981;
+        --border: #e2e8f0;
+        --gold: #f59e0b;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+      }
+      
+
+      .container {
+  max-width: 760px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+      header {
+        text-align: center;
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        margin: 0 0 8px 0;
+        font-size: 1.8rem;
+        color: var(--primary);
+      }
+
+      p.subtitle {
+        color: #64748b;
+        margin: 0;
+      }
+      
+      .progress-container {
+        width: 100%;
+        height: 8px;
+        background: var(--border);
+        border-radius: 4px;
+        margin-bottom: 24px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--gold);
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      #quiz-area {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .quiz-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        padding: 24px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInDown 0.4s forwards;
+      }
+
+      @keyframes fadeInDown {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .question-title {
+        font-weight: 600;
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .badge-info { background: #3b82f6; }
+      .badge-math { background: #ea580c; }
+      .badge-physics { background: #db2777; }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      /* Стили кнопки-варианта */
+      .option-btn {
+        background: #f1f5f9;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        padding: 14px 16px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text);
+      }
+
+      .option-btn:hover {
+        background: #e2e8f0;
+        border-color: var(--border);
+      }
+
+      /* ГЛАВНОЕ: стиль для выбранного варианта */
+      .option-btn.selected {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Цвет для правильного ответа (если нужно подсветить после проверки) */
+.option-btn.correct {
+  background: var(--accent-success);
+  color: white;
+}
+
+/* Цвет для неправильного ответа */
+.option-btn.wrong {
+  background: #fee2e2;
+  color: var(--accent-error);
+  border-color: #fecaca;
+}
+      .next-btn-wrapper {
+        margin-top: 24px;
+        text-align: center;
+      }
+
+      .next-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        transition: transform 0.1s, background-color 0.2s;
+      }
+
+      .next-btn:hover {
+        background: #2563eb;
+      }
+
+      .next-btn:active {
+        transform: scale(0.98);
+      }
+
+      .next-btn.disabled {
+        background: var(--border);
+        color: #94a3b8;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .result-screen {
+        display: none;
+        text-align: center;
+        padding: 40px 20px;
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      }
+
+      .grade-large {
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--gold);
+        line-height: 1;
+      }
+
+      .feedback {
+        color: #64748b;
+        margin: 16px 0 24px 0;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      button.restart {
+        background: transparent;
+        color: #64748b;
+        border: 1px solid var(--border);
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 12px;
+      }
+
+      button.restart:hover {
+        color: var(--text);
+        border-color: var(--text);
+      }
+
+      #fireworks-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 999;
+        display: none; 
+      }
+
+      .firework-particle {
+        position: absolute;
+        background: radial-gradient(circle, #fff, transparent);
+        border-radius: 50%;
+        filter: drop-shadow(0 0 8px currentColor);
+        animation: floatUp 2s ease-out forwards;
+      }
+
+      @keyframes floatUp {
+        0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+        100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Квест знаний</h1>
+        <p class="subtitle">Информатика, физика, математика — собери награду!</p>
+      </header>
+
+      <div class="progress-container">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+
+      <div id="quiz-area"></div>
+      <div class="result-screen" id="result-screen">
+        <div class="grade-large" id="grade-display">0</div>
+        <p class="feedback" id="feedback-text">Текст обратной связи</p>
+        <button class="restart" onclick="location.reload()">Пройти заново</button>
+      </div>
+    </div>
+
+    <div id="fireworks-container"></div>
+
+    <script>
+      const questions = [
+        { category: 'Информатика', text: 'Что такое алгоритм?', options: ['Набор команд для процессора', 'Последовательность действий для решения задачи', 'Программа на языке Python', 'Тип данных в программировании'], correct: 1 },
+        { category: 'Физика', text: 'Какая формула выражает второй закон Ньютона?', options: ['F = m * a', 'E = m * c^2', 'V = I * R', 'P = F / S'], correct: 0 },
+        { category: 'Математика', text: 'Чему равен квадрат суммы (a + b)^2?', options: ['a^2 + b^2', 'a^2 - b^2', 'a^2 + 2ab + b^2', '2a + 2b'], correct: 2 },
+        { category: 'Информатика', text: 'В папке есть файлы: a.txt, b.txt, c.jpg. Сколько текстовых файлов?', options: ['1', '2', '3', '0'], correct: 1},
+        { category: 'Физика', text: 'В каких единицах измеряется сила в системе СИ?', options: ['Джоуль', 'Ватт', 'Ньютон', 'Паскаль'], correct: 2 },
+        { category: 'Математика', text: 'Как найти площадь прямоугольника?', options: ['S = a + b', 'S = a * b', 'S = 2 * (a + b)', 'S = a^2'], correct: 1 },
+        { category: 'Математика', text: 'Если x = 5, чему равно значение выражения 2x + 3?', options: ['8', '10', '13', '15'], correct: 2 },
+        { category: 'Информатика', text: 'В алфавите всего 4 буквы: А, Б, В, Г. Каждую букву закодировали двоичным кодом одинаковой длины. Каким будет код буквы В, если А = 01, Б = 10, Г = 11?', options: ['001', '10', '01', '111'], correct: 1 },
+        { category: 'Физика', text: 'Книга массой 400 г лежит на столе. Чему равна сила тяжести, действующая на книгу? Ускорение свободного падения считай равным.', options: ['400 Н', '40 Н', '0,4 Н', '4 Н'], correct: 3 },
+        { category: 'Математика', text: 'Сколько градусов в развёрнутом угле?', options: ['90', '180', '360', '45'], correct: 1 },
+        { category: 'Информатика', text: 'Какое устройство является "мозгом" компьютера?', options: ['Видеокарта', 'Оперативная память', 'Процессор', 'Жесткий диск'], correct: 2 },
+        { category: 'Физика', text: 'Алюминиевый брусок имеет размеры: длина — 20 см, ширина — 10 см, высота — 5 см. Плотность алюминия — 2700 кг/м3. Найдите массу бруска.', options: ['2,7 кг', '27 кг', '0,27 кг', '0,027 кг'], correct: 2 },
+        { category: 'Математика', text: 'Найдите корень уравнения x - 7 = 10', options: ['3', '17', '-3', '70'], correct: 1 },
+        { category: 'Информатика', text: 'Что такое переменная?', options: ['Место в памяти для хранения данных', 'Название программы', 'Кнопка на экране', 'Цвет фона'], correct: 0 },
+        { category: 'Физика', text: 'В стакан налили 200 мл воды. Потом в него аккуратно положили кусок льда массой 50 г. Лёд плавает и не касается дна. На сколько миллилитров поднимется уровень воды в стакане? Плотность воды — 1000 кг/м3, плотность льда — 900 кг/м3?', options: ['На 50 мл', 'На 40 мл', 'На 45 мл', 'На 55 мл'], correct: 2 },
+        { category: 'Математика', text: 'Чему равна сумма углов треугольника?', options: ['180 градусов', '90 градусов', '360 градусов', '270 градусов'], correct: 0 },
+        { category: 'Информатика', text: 'Исполнитель "Шагатель" умеет делать команды: ВПЕРЁД (на 1 клетку), ВПРАВО (на 1 клетку). Чтобы дойти из клетки (0;0) в клетку (3;2), сколько всего команд нужно сделать?', options: ['3', '2', '10', '5'], correct: 3 },
+        { category: 'Физика', text: 'Кто открыл закон всемирного тяготения?', options: ['Архимед', 'Ньютон', 'Эйнштейн', 'Галилей'], correct: 1 },
+        { category: 'Математика', text: 'Как называется число, которое делится только на 1 и на само себя?', options: ['Составное', 'Простое', 'Четное', 'Нечетное'], correct: 1 },
+        { category: 'Информатика', text: 'Что такое цикл в программировании?', options: ['Команда для вывода текста', 'Повторение блока кода несколько раз', 'Удаление файла', 'Создание переменной'], correct: 1 },
+        { category: 'Физика', text: 'Что происходит с телом, если на него не действуют силы?', options: ['Оно останавливается', 'Оно движется равномерно или покоится', 'Оно падает', 'Оно взрывается'], correct: 1 },
+        { category: 'Математика', text: 'В двух коробках было одинаковое количество карандашей. Из первой коробки переложили во вторую 12 карандашей. После этого во второй коробке стало в 3 раза больше карандашей, чем в первой. Сколько карандашей было в каждой коробке сначала?', options: ['18', '24', '30', '36'], correct: 1 },
+        { category: 'Информатика', text: 'Статья содержит 4 страницы, на каждой странице — 32 строки, в каждой строке — 64 символа. Каждый символ кодируется 1 байтом. Какой информационный объём статьи в килобайтах?', options: ['8 КБ', '16 КБ', '32 КБ', '62 КБ'], correct: 1 },
+        { category: 'Физика', text: 'Велосипедист ехал 15 минут со скоростью 18 км/ч, потом остановился отдохнуть на 10 минут, а затем проехал ещё 3 км за 20 минут. Найдите среднюю скорость велосипедиста за всё время поездки (включая отдых).', options: ['12 км/ч', '9 км/ч', '15 км/ч', '10,5 км/ч'], correct: 1 },
+        { category: 'Математика', text: 'Две прямые пересекаются. Один из образовавшихся углов равен 40∘. Найдите остальные три угла.', options: ['40∘, 140∘, 140∘', '40∘, 40∘, 140∘', '140∘, 140∘, 140∘', '50∘, 130∘, 130∘'], correct: 0 }
+      ];
+
+      let currentIndex = 0;
+      let score = 0;
+      let selectedOption = -1;
+
+      const quizArea = document.getElementById('quiz-area');
+      const resultScreen = document.getElementById('result-screen');
+      const progressFill = document.getElementById('progress-fill');
+      const masterBtn = document.getElementById('master-btn');
+
+      function renderFirstQuestion() {
+        const q = questions[0];
+        addQuestionCard(q, 0);
+      }
+
+      function addQuestionCard(question, index) {
+        let badgeClass = 'badge-info';
+        if (question.category === 'Математика') badgeClass = 'badge-math';
+        if (question.category === 'Физика') badgeClass = 'badge-physics';
+
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+        card.innerHTML = `
+          <div class="question-title">
+            <span class="badge ${badgeClass}">${question.category}</span>
+            ${question.text}
+          </div>
+          <div class="options">
+            ${question.options.map((opt, idx) => `
+              <button class="option-btn ${selectedOption === idx && index === currentIndex ? 'selected' : ''}" onclick="selectOption(${idx}, ${index})">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div class="next-btn-wrapper">
+            <button class="next-btn ${selectedOption === -1 ? 'disabled' : ''}" id="next-btn-${index}" onclick="nextQuestion(${index})">
+              Далее →
+            </button>
+          </div>
+        `;
+        quizArea.appendChild(card);
+      }
+      
+window.selectOption = function(idx, cardIndex) {
+  // Разрешаем выбирать только для текущего (последнего) вопроса
+  if (cardIndex !== currentIndex) return;
+
+  selectedOption = idx;
+
+  // Находим все кнопки вариантов на текущей карточке
+  const options = document.querySelectorAll('.option-btn');
+  options.forEach(btn => btn.classList.remove('selected'));
+
+  // Выделяем выбранную
+  const selectedBtn = document.querySelector(`.option-btn[onclick*="selectOption(${idx}, ${cardIndex})"]`);
+  if (selectedBtn) {
+    selectedBtn.classList.add('selected');
+  }
+
+  // Активируем кнопку «Далее»
+  const nextBtn = document.getElementById(`next-btn-${cardIndex}`);
+  if (nextBtn) {
+    nextBtn.classList.remove('disabled');
+  }
+};
+
+
+      window.nextQuestion = function(cardIndex) {
+        if (cardIndex !== currentIndex || selectedOption === -1) return;
+
+        const correctAnswer = questions[currentIndex].correct;
+        if (selectedOption === correctAnswer) {
+          score++;
+        }
+
+        currentIndex++;
+        selectedOption = -1;
+
+        if (currentIndex >= questions.length) {
+          showResult();
+        } else {
+          addQuestionCard(questions[currentIndex], currentIndex);
+          // Прокручиваем к новому вопросу — эффект «листания вниз»
+          const newCard = quizArea.lastElementChild;
+          newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          // Обновляем прогресс-бар
+          const percent = Math.round((currentIndex / questions.length) * 100);
+          progressFill.style.width = percent + '%';
+        }
+      };
+
+      function showResult() {
+        const total = questions.length;
+        const percent = Math.round((score / total) * 100);
+        const gradeDisplay = document.getElementById('grade-display');
+        const feedbackText = document.getElementById('feedback-text');
+
+        gradeDisplay.textContent = percent;
+ 
+
+        let feedback;
+        if (percent === 100) {
+          feedback = 'Отличный результат! Ты знаешь всё. 🎉';
+          startFireworks();
+        } else if (percent >= 75) {
+          feedback = 'Хороший результат. Есть куда расти.';
+        } else if (percent >= 50) {
+          feedback = 'Неплохо, но стоит повторить темы.';
+        } else {
+          feedback = 'Стоит уделить время повторению. Ты справишься!';
+        }
+
+        feedbackText.textContent = feedback;
+
+        quizArea.style.display = 'none';
+        resultScreen.style.display = 'block';
+        masterBtn.classList.add('unlocked');
+        masterBtn.disabled = false;
+        masterBtn.onclick = () => alert('Поздравляем! Ты завершил квест на ' + percent + '%');
+      }
+
+      // Фейерверк
+      function startFireworks() {
+        const container = document.getElementById('fireworks-container');
+        container.style.display = 'block';
+
+        function createParticle() {
+          const particle = document.createElement('div');
+          particle.className = 'firework-particle';
+          particle.style.left = Math.random() * 100 + '%';
+          const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+          particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+          particle.style.width = (Math.random() * 8 + 4) + 'px';
+          particle.style.height = particle.style.width;
+          container.appendChild(particle);
+
+          setTimeout(() => {
+            particle.remove();
+          }, 2000);
+        }
+
+        for (let i = 0; i < 40; i++) {
+          setTimeout(createParticle, i * 100);
+        }
+      }
+
+      // Запуск: показываем первый вопрос
+      renderFirstQuestion();
+    </script>
+  </body>
+</html>
